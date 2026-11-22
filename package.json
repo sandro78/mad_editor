@@ -1,0 +1,37 @@
+{
+  "name": "mad-editor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "storybook": "storybook dev",
+    "build-storybook": "storybook build",
+    "creevey-ui": "creevey test --no-docker --storybook-start \"npm run storybook -- --ci -p 6006\" --ui",
+    "creevey-ci": "creevey test --no-docker --storybook-start \"npm run storybook -- --ci -p 6006\""
+  },
+  "dependencies": {
+    "@mermaid-js/layout-elk": "^0.2.3",
+    "@monaco-editor/react": "^4.7.0",
+    "mermaid": "^11.4.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.6.8",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^6.3.0",
+    "creevey": "^0.11.7",
+    "jsdom": "^22.1.0",
+    "playwright": "^1.58.2",
+    "storybook": "^10.6.8",
+    "tsx": "4.19.4",
+    "typescript": "^5.6.3",
+    "vite": "^8.3.8",
+    "vitest": "^0.34.6"
+  }
+}

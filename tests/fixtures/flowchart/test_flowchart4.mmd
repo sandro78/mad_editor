@@ -1,0 +1,103 @@
+flowchart TB
+    UI["User interface"]
+ 
+    subgraph BE["Backend — control plane"]
+        API["Request for network visibility"]
+ 
+        subgraph PREP["Network preparation"]
+            NET["Checking network selection"]
+            ROLE_ON["Enable role<br/>connectivity_checking"]
+            OPEN["Open necessary ports<br/>TCP / UDP"]
+            NET --> ROLE_ON --> OPEN
+        end
+ 
+        subgraph MANAGER["Checks management"]
+            NODES["Preparing list of nodes<br/>with IP-adresses"]
+            PAIRS["Preparing pairs of nodes<br/>for network visibility verification"]
+            PLAN["Planning of tests<br/>and concurrent execution"]
+            COLLECT["Collect tests results"]
+            AGG["Determine status<br/>for each pair of nodes"]
+            CLEAN["Finalize tests<br/>and free resources"]
+ 
+            NODES --> PAIRS --> PLAN
+            COLLECT --> AGG --> CLEAN
+        end
+ 
+        RESULT["Result list of nodes pairs:<br/>connectivity_ok / no_connection"]
+ 
+        API --> NET
+        OPEN --> NODES
+        CLEAN --> RESULT
+    end
+ 
+    subgraph AGENTS["Cluster nodes"]
+        subgraph A["Node 1"]
+            A_API["Agent"]
+            A_PROC["Echo functionality"]
+            A_S["TCP / UDP server"]
+            A_C["TCP / UDP client"]
+            A_PID[("List of echo services")]
+            A_API --> A_PROC
+            A_PROC --> A_S
+            A_PROC --> A_C
+            A_PROC --> A_PID
+        end
+ 
+        subgraph B["Node 2"]
+            B_API["Agent"]
+            B_PROC["Echo functionality"]
+            B_S["TCP / UDP server"]
+            B_C["TCP / UDP client"]
+            B_PID[("List of echo services")]
+            B_API --> B_PROC
+            B_PROC --> B_S
+            B_PROC --> B_C
+            B_PROC --> B_PID
+        end
+ 
+        subgraph C["Node N"]
+            C_API["Agent"]
+            C_PROC["Echo functionality"]
+            C_S["TCP / UDP server"]
+            C_C["TCP / UDP client"]
+            C_PID[("List of echo services")]
+            C_API --> C_PROC
+            C_PROC --> C_S
+            C_PROC --> C_C
+            C_PROC --> C_PID
+        end
+    end
+ 
+    PLAN -->|"Servers and clients start commands"| A_API
+    PLAN -->|"Servers and clients start commands"| B_API
+    PLAN -->|"Servers and clients start commands"| C_API
+ 
+    A_C <-->|"Data transmission echo-response"| B_S
+    B_C <-->|"Data transmission echo-response"| A_S
+    A_C <-->|"Data transmission echo-response"| C_S
+    C_C <-->|"Data transmission echo-response"| A_S
+ 
+    A_API -->|"Statuses"| COLLECT
+    B_API -->|"Statuses"| COLLECT
+    C_API -->|"Statuses"| COLLECT
+ 
+    CLEAN -.->|"Stop services"| A_API
+    CLEAN -.->|"Stop services"| B_API
+    CLEAN -.->|"Stop services"| C_API
+ 
+    UI --> API
+    RESULT --> UI
+ 
+    classDef ui fill:#dbeafe,stroke:#2563eb,color:#1e3a8a,stroke-width:2px
+    classDef backend fill:#d1fae5,stroke:#059669,color:#064e3b,stroke-width:1.5px
+    classDef agent fill:#fef3c7,stroke:#d97706,color:#78350f,stroke-width:1.5px
+    classDef process fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+    classDef storage fill:#f3e8ff,stroke:#9333ea,color:#581c87
+    classDef network fill:#cffafe,stroke:#0891b2,color:#164e63
+ 
+    class UI ui
+    class API,NODES,PAIRS,PLAN,COLLECT,AGG,CLEAN,RESULT backend
+    class ROLE_ON,OPEN,NET network
+    class A_API,B_API,C_API agent
+    class A_PROC,B_PROC,C_PROC,A_S,A_C,B_S,B_C,C_S,C_C process
+    class A_PID,B_PID,C_PID storage

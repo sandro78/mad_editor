@@ -1,0 +1,92 @@
+flowchart TB
+    %% =========================================================
+    %% Client
+    %% =========================================================
+    UI["Management panel"]
+ 
+    %% =========================================================
+    %% Agent
+    %% =========================================================
+    subgraph NODE["Cluster node"]
+        direction TB
+ 
+        API["Agent<br/>CS Management API"]
+ 
+        subgraph API_GROUPS["Chunk Servers Operations"]
+            direction LR
+ 
+            CONFIG["CS configuration<br/>• get<br/>• change"]
+ 
+            CLUSTER["CS management at cluster<br/>• add<br/>• get information<br/>• remove<br/>• get CS list by cluster"]
+ 
+            JOURNAL["CS journal<br/>• get info<br/>• create / remove<br/>• resize<br/>• clean"]
+ 
+            DATA["CS clean<br/>• journal<br/>• data"]
+ 
+            SERVICE["CS service management<br/>• start<br/>• stop<br/>• restart<br/>• other operations"]
+ 
+            RECOVERY["Recovery CS"]
+ 
+            MAINT["Maintenance mode<br/>• switch on<br/>• switch off"]
+ 
+            DISK["Reuse disk in CS"]
+        end
+ 
+        FS["Node fle system<br/>configuration / data / CS journals"]
+ 
+        CLI["storage CLI"]
+ 
+        CS["Node Chunk Servers"]
+    end
+ 
+    %% =========================================================
+    %% Flow
+    %% =========================================================
+    UI -->|"HTTP API"| API
+ 
+    API --> CONFIG
+    API --> CLUSTER
+    API --> JOURNAL
+    API --> DATA
+    API --> SERVICE
+    API --> RECOVERY
+    API --> MAINT
+    API --> DISK
+ 
+    CONFIG --> FS
+    CLUSTER --> CLI
+    JOURNAL --> FS
+    DATA --> FS
+    SERVICE --> CLI
+    RECOVERY --> CLI
+    MAINT --> CLI
+    DISK --> CLI
+ 
+    CLI --> FS
+    CLI --> CS
+    FS <--> CS
+ 
+    %% =========================================================
+    %% Styles
+    %% =========================================================
+    classDef client fill:#4F81BD,stroke:#2F5597,color:#fff,stroke-width:2px
+ 
+    classDef agent fill:#ED7D31,stroke:#C65911,color:#fff,stroke-width:3px
+ 
+    classDef operation fill:#E2F0D9,stroke:#70AD47,color:#1F1F1F,stroke-width:1.5px
+ 
+    classDef infra fill:#D9EAF7,stroke:#5B9BD5,color:#1F1F1F,stroke-width:2px
+ 
+    classDef storage fill:#FFF2CC,stroke:#BF9000,color:#1F1F1F,stroke-width:2px
+ 
+    class UI client
+    class API agent
+    class CONFIG,CLUSTER,JOURNAL,DATA,SERVICE,RECOVERY,MAINT,DISK operation
+    class FS,CLI infra
+    class CS storage
+ 
+    %% =========================================================
+    %% Subgraph styling
+    %% =========================================================
+    style NODE fill:#F8F9FA,stroke:#7F8C8D,stroke-width:2px
+    style API_GROUPS fill:#FFFFFF,stroke:#A6A6A6,stroke-width:1px

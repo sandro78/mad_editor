@@ -1,0 +1,36 @@
+flowchart TB
+  subgraph UI["Management panel"]
+    API["Calls Agent API"]
+  end
+  subgraph AGENT["Agent (at each node)"]
+    REST["Disk Management API"]
+    subgraph OPS["Physical disks operations"]
+      LIST["Getting info<br/>• List of disks<br/>• Info about specific disk"]
+      LED["Disk LED management<br/>• Switch on / off<br/>• Blink LED"]
+      PREP["Prepare disk<br/>• Assign role<br/>• Create FS<br/>• Mount"]
+      FREE["Detach disk<br/>• Unmount"]
+      DIAG["Diagnostic<br/>• SMART<br/>• System errors"]
+    end
+  end
+  subgraph LINUX["Embedded Linux tools"]
+    BLOCK["Info about block devices<br/>lsblk / udev / sysfs"]
+    BLINK["LED disks control<br/>sysfs / SCSI / SES"]
+    FS["FS and volumes management<br/>mkfs / mount / umount / blkid"]
+    DIAGTOOLS["Hardware diagnostic<br/>smartctl / dmesg"]
+  end
+  API <-->|HTTP API| REST
+  REST --> LIST & LED & PREP & FREE & DIAG
+  LIST --> BLOCK
+  LED --> BLINK
+  PREP --> FS
+  FREE --> FS
+  DIAG --> DIAGTOOLS
+
+  classDef ui fill:#DCEBFF,stroke:#3975C6,color:#17365D,stroke-width:2px
+  classDef agent fill:#D9EAD3,stroke:#548235,color:#274E13,stroke-width:2px
+  classDef operation fill:#E2F0D9,stroke:#70AD47,color:#274E13
+  classDef tools fill:#FFF2CC,stroke:#BF9000,color:#7F6000
+  class API ui
+  class REST agent
+  class LIST,LED,PREP,FREE,DIAG operation
+  class BLOCK,BLINK,FS,DIAGTOOLS tools

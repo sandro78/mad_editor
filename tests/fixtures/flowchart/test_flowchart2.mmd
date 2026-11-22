@@ -1,0 +1,46 @@
+flowchart TB
+  subgraph UI["Management panel"]
+    PUI["Calls Agent API"]
+  end
+  subgraph API["Agent — Volume Management API"]
+    REST["REST API"]
+    GET_LIST["Get volumes list"]
+    GET_ONE["Get specific volume info"]
+    CREATE["Create volume"]
+    DELETE["Delete volume"]
+    UPDATE["Change volume's parameters"]
+  end
+  subgraph LOGIC["Agent — volumes management logic"]
+    HANDLER["API handlers"]
+    CLI["storage CLI"]
+    FS["Work with service mount<br/>points of storage at FS"]
+  end
+  subgraph STORAGE["Storage cluster"]
+    VCLI["Storage CLI management commands"]
+    MOUNT["Service mount points"]
+    VOLUMES[("Cluster volumes")]
+  end
+  PUI --> REST
+  REST --> GET_LIST & GET_ONE & CREATE & DELETE & UPDATE
+  GET_LIST --> HANDLER
+  GET_ONE --> HANDLER
+  CREATE --> HANDLER
+  DELETE --> HANDLER
+  UPDATE --> HANDLER
+  HANDLER --> CLI
+  HANDLER --> FS
+  CLI <--> VCLI
+  FS <--> MOUNT
+  VCLI --> VOLUMES
+  MOUNT <--> VOLUMES
+
+  classDef client fill:#FCE4EC,stroke:#EC4899,color:#9D174D,stroke-width:2px
+  classDef api fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A,stroke-width:2px
+  classDef operation fill:#DCFCE7,stroke:#16A34A,color:#14532D,stroke-width:2px
+  classDef logic fill:#FEF3C7,stroke:#D97706,color:#78350F,stroke-width:2px
+  classDef storage fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95,stroke-width:2px
+  class PUI client
+  class REST api
+  class GET_LIST,GET_ONE,CREATE,DELETE,UPDATE operation
+  class HANDLER,CLI,FS logic
+  class VCLI,MOUNT,VOLUMES storage
