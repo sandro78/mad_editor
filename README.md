@@ -2,9 +2,11 @@
 
 Mad Editor is a browser-based editor for creating, previewing, and exporting Mermaid diagrams as PNG files.
 
-There are many similar on market but only one from chatgpt.com generates well previews and download of high quality PNGs. This editor can be run in offline environment and allows you to get PNG previews very similar to chatgpt's ones.
+There are many similar on market but only one from chatgpt.com generates well previews and download of high quality PNGs. This editor can be run in offline environment and allows you to get PNG previews very similar to chatgpt's ones. See [Storybook](https://sandro78.github.io/mad_editor/storybook/) with diagrams samples.
 
 It combines a Monaco-based source editor with Mermaid rendering and a layout-normalization layer that improves complex flowcharts: rounded routes, left-anchored fan-outs, distinct merge ports, and better handling of nested clusters and cylinder nodes.
+
+Try latest buid of editor [here](https://sandro78.github.io/mad_editor/) or download sources, build as described below and publish in your own way or even use locally.
 
 ## Requirements
 
